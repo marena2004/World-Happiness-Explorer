@@ -1,1 +1,1 @@
-# -World-Happiness-Explorer
+# World-Happiness-Explorer
