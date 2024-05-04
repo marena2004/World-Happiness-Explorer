@@ -1,11 +1,10 @@
 # World-Happiness-Explorer
 - A project to visualize and analyze the World Happiness Report data from 2015 to 2019
-
-# Data Source
-
- `["https://worldhappiness.report/ed/2021/#appendices-and-data"](https://www.kaggle.com/datasets/unsdsn/world-happiness/data)` 
-
   
+## Data Source
+
+The data used in this project is available from the kaggle website. You can download it [here](https://www.kaggle.com/datasets/unsdsn/world-happiness/data).
+
 ## How To Run
 
 1. Clone the repository:
