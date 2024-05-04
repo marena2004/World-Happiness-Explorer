@@ -9,5 +9,3 @@ if __name__ == "__main__":
     view = View(controller)
     controller.set_view(view)
     root.mainloop()
-
-

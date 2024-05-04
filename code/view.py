@@ -47,5 +47,3 @@ class NavigationBar(ttk.Frame):
 
         self.about_button = ttk.Button(self, text="About", command=self.controller.show_about)
         self.about_button.pack(side=tk.LEFT, padx=10)
-
-
