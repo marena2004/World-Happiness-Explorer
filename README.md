@@ -14,6 +14,8 @@ git clone https://github.com/marena2004/World-Happiness-Explorer.git
 2. Navigate to the project directory:
 ```
 cd World-Happiness-Explorer
+```
+```
 cd code
 ```
 3. Create and activate a virtual environment:
