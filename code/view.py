@@ -33,6 +33,9 @@ class View(tk.Tk):
     def show_home(self):
         self.show_page("Home")
 
+    def quit(self):
+        self.destroy()
+
 
 class NavigationBar(ttk.Frame):
     def __init__(self, parent, controller):
@@ -47,3 +50,9 @@ class NavigationBar(ttk.Frame):
 
         self.about_button = ttk.Button(self, text="About", command=self.controller.show_about)
         self.about_button.pack(side=tk.LEFT, padx=10)
+
+        self.quit_button = ttk.Button(self, text="Quit", command=self.quit_application)
+        self.quit_button.pack(side=tk.RIGHT, padx=10)
+
+    def quit_application(self):
+        self.controller.quit_application()

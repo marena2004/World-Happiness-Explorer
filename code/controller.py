@@ -17,3 +17,6 @@ class Controller:
 
     def show_about(self):
         self.view.show_page("About")
+
+    def quit_application(self):
+        self.view.quit()
