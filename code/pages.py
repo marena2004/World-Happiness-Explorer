@@ -3,6 +3,9 @@ from tkinter import ttk
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
 
 class HomePage(tk.Frame):
     def __init__(self, parent, controller):
@@ -30,6 +33,7 @@ class ExplorePage(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.stats_text = None
+        self.heatmap = None
         self.controller = controller
         self.init_components()
 
@@ -119,13 +123,37 @@ class ExplorePage(tk.Frame):
             self.stats_text.delete(1.0, tk.END)
             self.stats_text.insert(tk.END, stats_text)
             self.stats_text.config(state="disabled")
+
+            # Generate and show heatmap
+            self.show_heatmap(selected_factor, selected_region, selected_year)
+
         else:
             self.clear_stats()  # Clear the stats text if no data found
+
+    def show_heatmap(self, selected_factor, selected_region, selected_year):
+        filtered_data = [row for row in self.data if
+                         row["Region"] == selected_region and row["Year"] == selected_year]
+
+        if filtered_data:
+            # Convert to DataFrame
+            df = pd.DataFrame(filtered_data)
+            # Convert numeric columns to numeric type
+            numerical_columns = ["Happiness_Score", selected_factor]
+            df[numerical_columns] = df[numerical_columns].apply(pd.to_numeric, errors='coerce')
+            # Drop NaN values
+            df.dropna(subset=numerical_columns, inplace=True)
+
+            sns.heatmap(df[numerical_columns].corr(), annot=True, cmap="YlGnBu")
+            plt.title(f"Happiness Score vs {selected_factor} in {selected_region} ({selected_year})")
+            plt.xlabel("Factors")
+            plt.ylabel("Factors")
+            plt.show()
 
     def clear_stats(self):
         self.stats_text.config(state="normal")
         self.stats_text.delete(1.0, tk.END)
         self.stats_text.config(state="disabled")
+
 
 class AboutPage(tk.Frame):
     def __init__(self, parent, controller):
