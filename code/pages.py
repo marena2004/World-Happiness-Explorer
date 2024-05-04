@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-
+import csv
 
 class HomePage(tk.Frame):
     def __init__(self, parent, controller):
@@ -37,14 +37,14 @@ class ExplorePage(tk.Frame):
         year_label = ttk.Label(filters_frame, text="Year:")
         year_label.grid(row=0, column=0, padx=5, pady=5)
 
-        year_combobox = ttk.Combobox(filters_frame, values=["2015", "2016", "2017", "2018", "2019"])
-        year_combobox.grid(row=0, column=1, padx=5, pady=5)
+        self.year_combobox = ttk.Combobox(filters_frame)
+        self.year_combobox.grid(row=0, column=1, padx=5, pady=5)
 
         region_label = ttk.Label(filters_frame, text="Region:")
         region_label.grid(row=0, column=2, padx=5, pady=5)
 
-        region_combobox = ttk.Combobox(filters_frame, values=["Region 1", "Region 2", "Region 3"])
-        region_combobox.grid(row=0, column=3, padx=5, pady=5)
+        self.region_combobox = ttk.Combobox(filters_frame)
+        self.region_combobox.grid(row=0, column=3, padx=5, pady=5)
 
         country_label = ttk.Label(filters_frame, text="Country:")
         country_label.grid(row=0, column=4, padx=5, pady=5)
@@ -71,8 +71,24 @@ class ExplorePage(tk.Frame):
         stats_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
 
         # Placeholder for statistics display
-        stats_text = tk.Text(stats_frame, width=50, height=5)
-        stats_text.grid(row=1, column=0, padx=5, pady=5)
+        self.stats_text = tk.Text(stats_frame, width=50, height=5)
+        self.stats_text.grid(row=1, column=0, padx=5, pady=5)
+
+        # Populate year and region comboboxes
+        self.populate_filters()
+
+    def populate_filters(self):
+        years = set()
+        regions = set()
+
+        with open("WorldHappiness2015-2019.csv", newline="") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                years.add(row["Year"])
+                regions.add(row["Region"])
+
+        self.year_combobox["values"] = sorted(years)
+        self.region_combobox["values"] = sorted(regions)
 
 
 class AboutPage(tk.Frame):
