@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from code.pages import HomePage, ExplorePage, AboutPage
+from pages import HomePage, ExplorePage, AboutPage
 
 
 class View(tk.Tk):
@@ -12,7 +12,7 @@ class View(tk.Tk):
         self.nav_bar = NavigationBar(self, self.controller)
         self.nav_bar.pack(side=tk.TOP, fill=tk.X)
 
-        self.container = tk.Frame(self)
+        self.container = tk.Frame(self, width=800, height=600)  # Set fixed size for the container frame
         self.container.pack(fill=tk.BOTH, expand=True)
 
         self.pages = {}
@@ -26,9 +26,9 @@ class View(tk.Tk):
         page = self.pages.get(page_name)
         if page:
             if self.controller.model.get_current_page():
-                self.controller.model.get_current_page().pack_forget()
+                self.controller.model.get_current_page().place_forget()
             self.controller.model.set_current_page(page)
-            page.pack(fill=tk.BOTH, expand=True)
+            page.place(relwidth=1, relheight=1)  # Set the page to fill the container
 
     def show_home(self):
         self.show_page("Home")
@@ -47,3 +47,5 @@ class NavigationBar(ttk.Frame):
 
         self.about_button = ttk.Button(self, text="About", command=self.controller.show_about)
         self.about_button.pack(side=tk.LEFT, padx=10)
+
+
