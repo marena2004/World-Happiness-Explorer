@@ -20,7 +20,7 @@ cd code
 ```
 3. Create and activate a virtual environment:
 ```
-python -m venv venv
+python -m venv env
 source venv/bin/activate   # On Windows, use venv\Scripts\activate
 ```
 4. Install the required dependencies:
