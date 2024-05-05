@@ -1,9 +1,8 @@
 # World Happiness Explorer
-- A project to visualize and analyze the World Happiness Report data from 2015 to 2019
-  
-## Data Source
+A project to visualize and analyze the World Happiness Report data from 2015 to 2019
 
-The data used in this project is available from the [kaggle](https://www.kaggle.com/datasets/unsdsn/world-happiness/data).
+# Description
+The project aims to provide users with an intuitive interface to explore and analyze happiness trends across countries and regions using data from the World Happiness Report. The UI will include interactive graphs and descriptive statistics to help users gain insights into factors affecting happiness levels.
 
 ## How To Run
 
@@ -31,7 +30,10 @@ pip install -r requirements.txt
 ```
 python main.py
 ```
+## Data Source
 
+The data used in this project is available from the [kaggle](https://www.kaggle.com/datasets/unsdsn/world-happiness/data).
+#
 - [Project Proposal](https://docs.google.com/document/d/1rYwh0XBd-xGEB_jBEmg6fCAKouZa63JLnUs3-XdLAMI/edit?usp=sharing)
 
 - [Design Documents and UML Diagrams](https://github.com/marena2004/World-Happiness-Explorer/wiki/Design-Documents-and-UML-Diagrams)
