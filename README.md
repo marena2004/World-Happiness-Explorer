@@ -31,3 +31,11 @@ pip install -r requirements.txt
 ```
 python main.py
 ```
+
+- [Project Proposal](https://docs.google.com/document/d/1rYwh0XBd-xGEB_jBEmg6fCAKouZa63JLnUs3-XdLAMI/edit?usp=sharing)
+
+- [Design Documents and UML Diagrams](https://github.com/marena2004/World-Happiness-Explorer/wiki/Design-Documents-and-UML-Diagrams)
+
+- [Development Plan](https://github.com/marena2004/World-Happiness-Explorer/wiki/Development-Plan)
+
+- [How to Install](https://github.com/marena2004/World-Happiness-Explorer/wiki/How-to-Install)
