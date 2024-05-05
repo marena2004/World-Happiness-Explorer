@@ -3,7 +3,7 @@
   
 ## Data Source
 
-The data used in this project is available from the kaggle website. You can download it [here](https://www.kaggle.com/datasets/unsdsn/world-happiness/data).
+The data used in this project is available from the [kaggle](https://www.kaggle.com/datasets/unsdsn/world-happiness/data).
 
 ## How To Run
 
