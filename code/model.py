@@ -1,9 +1,23 @@
-class Model:
-    def __init__(self):
-        self.current_page = None
+import pandas as pd
 
-    def set_current_page(self, page):
-        self.current_page = page
 
-    def get_current_page(self):
-        return self.current_page
+class DataLoader:
+    """Handles loading, cleaning, and storing of CSV data."""
+
+    def __init__(self, filename):
+        self.filename = filename
+        self.data = None
+
+    def load_data(self):
+        try:
+            self.data = pd.read_csv(self.filename)
+        except FileNotFoundError:
+            raise FileNotFoundError("CSV file not found.")
+
+        self.clean_data()
+
+    def clean_data(self):
+        pass
+
+    def get_data(self):
+        return self.data
