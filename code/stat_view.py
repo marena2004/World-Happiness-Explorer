@@ -1,3 +1,4 @@
+""" Module For Statistic page"""
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -8,7 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class StatPage:
     """Statistics page with summary statistics and histogram."""
 
-    def __init__(self,root, model):
+    def __init__(self, root, model):
         self.root = root
         self.model = model
         self.page = ttk.Frame(self.root)
@@ -43,9 +44,9 @@ class StatPage:
             region_label = ttk.Label(selection_frame, text="Select Region:")
             region_label.grid(row=0, column=1, padx=5, pady=5)
             self.region_var = tk.StringVar()
+            self.region_values = ["All"] + self.data["Region"].dropna().unique().tolist()
             region_combobox = ttk.Combobox(selection_frame, textvariable=self.region_var,
-                                           values=["All"] + self.data["Region"].unique().tolist()
-                                           ,state="readonly")
+                                           values=self.region_values, state="readonly")
             region_combobox.grid(row=1, column=1, padx=5, pady=5)
 
             # Select Year
@@ -69,16 +70,22 @@ class StatPage:
             histogram_button = ttk.Button(selection_frame, text="Histogram", command=self.show_histogram)
             histogram_button.grid(row=2, column=1, columnspan=1, pady=10)
 
+            # Frame for summary box
+            summary_frame = ttk.Frame(self.root)
+            summary_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+
             # Summary Box
-            self.summary_box = tk.Text(self.root, height=10, width=50, wrap='word')
+            self.summary_box = tk.Text(summary_frame, height=10, width=50, wrap='word')
             self.summary_box.pack(expand=True, fill='both', padx=10, pady=10)
             self.summary_box.configure(state='disabled', font=("Arial", 12))  # Make the text box read-only
 
+            # Frame for histogram graph
+            histogram_frame = ttk.Frame(self.root)
+            histogram_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+
             # Histogram canvas
-            self.histogram_frame = ttk.Frame(self.root)
-            self.histogram_frame.pack(expand=True, fill='both', padx=10, pady=10)
             self.figure, self.ax = plt.subplots(figsize=(5, 4))
-            self.canvas = FigureCanvasTkAgg(self.figure, master=self.histogram_frame)
+            self.canvas = FigureCanvasTkAgg(self.figure, master=histogram_frame)
             self.canvas.draw()
             self.canvas.get_tk_widget().pack(expand=True, fill='both')
 
@@ -189,4 +196,6 @@ class StatPage:
 
     def run(self):
         self.root.mainloop()
+
+
 

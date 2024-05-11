@@ -1,3 +1,4 @@
+""" Module for Controller"""
 import tkinter as tk
 from tkinter import ttk
 from model import Model

@@ -1,3 +1,4 @@
+""" Module for run application """
 from controller import Controller
 
 if __name__ == "__main__":

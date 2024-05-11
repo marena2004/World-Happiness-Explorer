@@ -1,3 +1,4 @@
+""" Module for OverallPage"""
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -7,7 +8,6 @@ import seaborn as sns
 import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 
 
 class OverallPage:
@@ -31,10 +31,12 @@ class OverallPage:
             self.data = None
 
     def create_widgets(self):
+        self.load_data()  # Ensure data is loaded before creating widgets
+
         if self.data is not None:
             # Choropleth Map
             map_frame = ttk.LabelFrame(self.page, text="Choropleth Map")
-            map_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+            map_frame.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
             self.show_choropleth_map(map_frame)
 
             # Scatter Plot
@@ -44,26 +46,26 @@ class OverallPage:
 
             # Pie Chart
             pie_frame = ttk.LabelFrame(self.page, text="Happiness Score by Region (All Years)")
-            pie_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+            pie_frame.grid(row=1, column=3, rowspan=2, padx=10, pady=10, sticky="nsew")
             self.show_pie_chart(pie_frame)
 
             # Bar Chart
             bar_frame = ttk.LabelFrame(self.page, text="Factors Contributing to Happiness Score")
-            bar_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+            bar_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
             self.show_bar_chart(bar_frame)
 
             # Descriptive Statistics
-            stats_frame = ttk.LabelFrame(self.page, text="Descriptive Statistics")
-            stats_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+            stats_frame = ttk.LabelFrame(self.page, text="Descriptive Statistics", width=300, height=40)
+            stats_frame.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
             self.show_descriptive_statistics(stats_frame)
 
             # Correlation Coefficient
-            coef_frame = ttk.LabelFrame(self.page, text="Correlation Coefficient")
-            coef_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
+            coef_frame = ttk.LabelFrame(self.page, text="Correlation Coefficient", width=300, height=30)
+            coef_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
             self.show_correlation_coefficient(coef_frame)
 
             # Configure grid weights to resize when the window expands
-            for i in range(3):
+            for i in range(4):
                 self.page.grid_rowconfigure(i, weight=1)
                 self.page.grid_columnconfigure(i, weight=1)
 
@@ -84,7 +86,7 @@ class OverallPage:
         world.plot(column="Happiness_Score", ax=ax, legend=True, cax=cax, cmap="YlGnBu",
                    legend_kwds={'label': "Happiness Score"})
 
-        ax.set_title("Choropleth Map - Happiness Score of Each Country")
+        ax.set_title("Choropleth Map - Happiness Score of Each Country", fontsize=10)
 
         # Display the map in the GUI
         canvas = FigureCanvasTkAgg(fig, master=parent_frame)
@@ -102,7 +104,7 @@ class OverallPage:
         sns.scatterplot(data=self.data, x=factor1, y=factor2, hue="Region", ax=ax, legend='brief')
         ax.set_xlabel(factor1, fontsize=10)
         ax.set_ylabel(factor2, fontsize=10)
-        ax.set_title(f"Scatter Plot: {factor1} vs {factor2}", fontsize=14)
+        ax.set_title(f"Scatter Plot: {factor1} vs {factor2}", fontsize=10)
 
         # Control legend size
         handles, labels = ax.get_legend_handles_labels()
@@ -123,7 +125,7 @@ class OverallPage:
         colors = sns.color_palette("pastel", len(region_counts))
         ax.legend(region_counts.index, title="Region", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1), fontsize=8,
                   facecolor='lightgrey')
-        ax.set_title("Happiness Score by Region (All Years)")
+        ax.set_title("Happiness Score by Region")
 
         # Display the pie chart in the GUI
         canvas = FigureCanvasTkAgg(fig, master=parent_frame)
@@ -135,10 +137,10 @@ class OverallPage:
         factors = ["GDP", "Family", "Health", "Freedom", "Corruption", "Generosity"]
         avg_factors = self.data[factors].mean()
 
-        fig, ax = plt.subplots(figsize=(6, 4))
+        fig, ax = plt.subplots(figsize=(4, 4))
         avg_factors.plot(kind='bar', ax=ax)
-        ax.set_title("Factors Contributing to Happiness Score")
-        ax.set_ylabel("Average Score")
+        ax.set_title("Factors Contributing to Happiness Score", fontsize=5)
+        ax.set_ylabel("Average Score", fontsize=10)
 
         # Display the bar chart in the GUI
         canvas = FigureCanvasTkAgg(fig, master=parent_frame)
@@ -146,22 +148,25 @@ class OverallPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def show_descriptive_statistics(self, parent_frame):
+        # Filter data to include only 'Happiness_Score' and 'GDP' columns
+        filtered_data = self.data[['Happiness_Score']]
+
         # Descriptive statistics
-        stats_text = tk.Text(parent_frame, wrap="word", height=15, width=60, state="disabled")
+        stats_text = tk.Text(parent_frame, wrap="word", height=10, width=60)
         stats_text.pack(fill="both", expand=True)
 
-        # Calculate descriptive statistics
-        desc_stats = self.data.describe()
-
-        # Insert statistics into the text widget
-        stats_text.insert(tk.END, str(desc_stats))
+        # Calculate descriptive statistics for filtered data
+        num_stats = filtered_data.describe()
+        stats_text.insert(tk.END, str(num_stats))
 
     def show_correlation_coefficient(self, parent_frame):
-        # Calculate correlation coefficients for numeric columns
-        numeric_data = self.data.select_dtypes(include=np.number)
-        corr_matrix = numeric_data.corr()
+        # Filter data to include only 'Happiness_Score' and 'GDP' columns
+        filtered_data = self.data[['Happiness_Score', 'GDP', 'Corruption']]
+
+        # Calculate correlation coefficients for filtered data
+        corr_matrix = filtered_data.corr()
 
         # Display correlation coefficients in a text box
-        coef_text = tk.Text(parent_frame, wrap="word", height=5, width=60, state="disabled")
+        coef_text = tk.Text(parent_frame, wrap="word", height=5, width=60)
         coef_text.pack(fill="both", expand=True)
         coef_text.insert(tk.END, "Correlation Coefficients:\n\n" + str(corr_matrix))
