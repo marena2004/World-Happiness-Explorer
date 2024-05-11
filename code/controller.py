@@ -65,6 +65,3 @@ class Controller:
         self.root.mainloop()
 
 
-if __name__ == "__main__":
-    controller = Controller()
-    controller.run()
