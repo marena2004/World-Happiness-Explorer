@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
-import pandas as pd
 from model import Model
 from overall_view import OverallPage
 from correlation_view import CorrelationPage
@@ -58,7 +56,7 @@ class Controller:
     def show_trend_page(self):
         """Show the trend analysis page."""
         trend_page = TrendPage(self.root, self.model)
-        trend_page.show()
+        trend_page.create_widgets()
 
     def run(self):
         """Run the application."""

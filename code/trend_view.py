@@ -2,10 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-from model import Model
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 class TrendPage:
     """Page to display trend analysis throughout the years."""

@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from model import Model
 
 
 class StatPage:
@@ -191,8 +190,3 @@ class StatPage:
     def run(self):
         self.root.mainloop()
 
-
-# Run the application
-# if __name__ == "__main__":
-#     stat_page = StatPage()
-#     stat_page.run()
