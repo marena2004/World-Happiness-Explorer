@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -13,10 +13,7 @@ class CorrelationPage:
         self.root = root
         self.model = model
         self.page = ttk.Frame(self.root)
-        # self.page.pack(fill="both", expand=True)
         self.load_data()
-        # self.create_widgets()
-
 
     def load_data(self):
         self.model.load_data()
@@ -50,10 +47,10 @@ class CorrelationPage:
             region_label.grid(row=0, column=2, padx=5, pady=5)
             self.region_var = tk.StringVar()
             self.region_listbox = tk.Listbox(scatter_frame, listvariable=self.region_var, selectmode="multiple",
-                                             exportselection=0, height=30,width=50)
-            self.region_listbox.grid(row=0, column=3, padx=5, pady=5)
+                                             exportselection=False, height=10, width=20)
+            self.region_listbox.grid(row=0, column=3, padx=5, pady=5, sticky="nsew")
 
-            for region in ["All"] + self.data["Region"].unique().tolist():
+            for region in sorted(self.data["Region"].dropna().unique()):
                 self.region_listbox.insert(tk.END, region)
 
             # Factor 1 selection
@@ -124,7 +121,7 @@ class CorrelationPage:
 
             # Graph frame for matrix
             matrix_graph_frame = ttk.Frame(matrix_frame)
-            matrix_graph_frame.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
+            matrix_graph_frame.grid(row=2, column=0, columnspan=4, padx=5, pady=5, sticky="nsew")
 
             self.matrix_figure, self.matrix_ax = plt.subplots(figsize=(5, 4))
             self.matrix_canvas = FigureCanvasTkAgg(self.matrix_figure, master=matrix_graph_frame)
@@ -132,7 +129,7 @@ class CorrelationPage:
 
             # Coefficient text box for matrix
             self.matrix_coefficient_text = tk.Text(matrix_frame, height=10, width=150)
-            self.matrix_coefficient_text.grid(row=3, column=0, columnspan=1, padx=5, pady=5)
+            self.matrix_coefficient_text.grid(row=3, column=0, columnspan=4, padx=5, pady=5)
             self.matrix_coefficient_text.config(state='disabled')
 
     def show_scatter_plot(self):
@@ -143,6 +140,10 @@ class CorrelationPage:
         region = self.region_var.get()
         factor1 = self.factor1_var.get()
         factor2 = self.factor2_var.get()
+
+        if not year or not region or not factor1 or not factor2:
+            messagebox.showwarning("Warning", "Please select Year, Region, and both Factors.")
+            return
 
         if year == "All":
             data_to_plot = self.data
@@ -162,7 +163,7 @@ class CorrelationPage:
         slope, intercept, _, _, _ = linregress(data_to_plot[factor1], data_to_plot[factor2])
         x_vals = np.array(self.scatter_ax.get_xlim())
         y_vals = intercept + slope * x_vals
-        self.scatter_ax.plot(x_vals, y_vals, color='red', linestyle='--', linewidth=2)
+        self.scatter_ax.plot(x_vals, y_vals, color='red', linestyle='-', linewidth=2)
 
         self.scatter_ax.set_xlabel(factor1)
         self.scatter_ax.set_ylabel(factor2)
@@ -194,13 +195,19 @@ class CorrelationPage:
 
         year = self.matrix_year_var.get()
 
+        if not year:
+            messagebox.showwarning("Warning", "Please select a Year.")
+            return
+
         if year == "All":
             data_to_plot = self.data
         else:
             data_to_plot = self.data[self.data["Year"] == int(year)]
 
+        # Remove "Year" column
+        numeric_data = data_to_plot.select_dtypes(include=np.number).drop(columns=["Year"], errors="ignore")
+
         self.matrix_ax.clear()
-        numeric_data = data_to_plot.select_dtypes(include=np.number)
         corr_matrix = numeric_data.corr()
         sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", square=True, ax=self.matrix_ax)
         self.matrix_ax.set_title("Correlation Matrix")
@@ -208,7 +215,7 @@ class CorrelationPage:
         self.matrix_canvas.draw()
 
         self.matrix_coefficient_text.config(state="normal")
-        self.matrix_coefficient_text.delete("1.0", tk.END)
+        self.matrix_coefficient_text.delete("1.0", tk.END)  # Clear text
         self.matrix_coefficient_text.insert(tk.END, "Correlation Coefficients:\n" + str(corr_matrix))
         self.matrix_coefficient_text.config(state="disabled")
 
@@ -217,9 +224,6 @@ class CorrelationPage:
         self.matrix_ax.clear()
         self.matrix_canvas.draw()
         self.matrix_coefficient_text.config(state="normal")
-        self.matrix_coefficient_text.delete("1.0", tk.END)
+        self.matrix_coefficient_text.delete("1.0", tk.END)  # Clear text
         self.matrix_coefficient_text.config(state="disabled")
-
-    def run(self):
-        self.root.mainloop()
 
