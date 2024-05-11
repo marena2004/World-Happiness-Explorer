@@ -10,20 +10,18 @@ from scipy.stats import linregress
 
 class CorrelationPage:
     """Page to display scatter plot and correlation matrix."""
+    def __init__(self,root, model):
+        self.root = root
+        self.model = model
+        self.page = ttk.Frame(self.root)
+        # self.page.pack(fill="both", expand=True)
+        self.load_data()
+        # self.create_widgets()
 
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Correlation Page")
-        self.create_widgets()
 
     def load_data(self):
-        self.model = Model()
-        try:
-            self.model.load_data()
-            self.data = self.model.get_data()
-        except FileNotFoundError:
-            messagebox.showerror("Error", "CSV file not found.")
-            self.data = None
+        self.model.load_data()
+        self.data = self.model.get_data()
 
     def create_widgets(self):
         self.load_data()
@@ -69,17 +67,17 @@ class CorrelationPage:
 
             # Factor 2 selection
             factor2_label = ttk.Label(scatter_frame, text="Select Factor 2:")
-            factor2_label.grid(row=1, column=2, padx=5, pady=5)
+            factor2_label.grid(row=2, column=0, padx=5, pady=5)
             self.factor2_var = tk.StringVar()
             factor2_combobox = ttk.Combobox(scatter_frame, textvariable=self.factor2_var,
                                             values=["Happiness_Rank", "Happiness_Score", "GDP",
                                                     "Family", "Health", "Freedom",
                                                     "Corruption", "Generosity"])
-            factor2_combobox.grid(row=1, column=3, padx=5, pady=5)
+            factor2_combobox.grid(row=2, column=1, padx=5, pady=5)
 
             # Go button for scatter plot
             scatter_go_button = ttk.Button(scatter_frame, text="Go", command=self.show_scatter_plot)
-            scatter_go_button.grid(row=2, column=1, columnspan=2, padx=5, pady=10)
+            scatter_go_button.grid(row=2, column=2, padx=5, pady=10)
 
             # Clear button for scatter plot
             scatter_clear_button = ttk.Button(scatter_frame, text="Clear", command=self.clear_scatter)
@@ -95,19 +93,19 @@ class CorrelationPage:
 
             # Year selection for matrix
             matrix_year_label = ttk.Label(matrix_frame, text="Select Year:")
-            matrix_year_label.grid(row=0, column=0, padx=5, pady=5)
+            matrix_year_label.grid(row=1, column=0, padx=5, pady=5)  # Adjusted row to 0
             self.matrix_year_var = tk.StringVar()
             matrix_year_combobox = ttk.Combobox(matrix_frame, textvariable=self.matrix_year_var,
                                                 values=["All"] + self.data["Year"].astype(str).unique().tolist())
-            matrix_year_combobox.grid(row=0, column=1, padx=5, pady=5)
+            matrix_year_combobox.grid(row=1, column=1, padx=5, pady=5)  # Adjusted row to 0
 
             # Go button for matrix
             matrix_go_button = ttk.Button(matrix_frame, text="Go", command=self.show_correlation_matrix)
-            matrix_go_button.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
+            matrix_go_button.grid(row=1, column=2, padx=5, pady=10)
 
             # Clear button for matrix
             matrix_clear_button = ttk.Button(matrix_frame, text="Clear", command=self.clear_matrix)
-            matrix_clear_button.grid(row=1, column=1, columnspan=2, padx=5, pady=10)
+            matrix_clear_button.grid(row=1, column=3, padx=5, pady=10)
 
             # Graph frame for scatter plot
             scatter_graph_frame = ttk.Frame(scatter_frame)
@@ -131,8 +129,8 @@ class CorrelationPage:
             self.matrix_canvas.get_tk_widget().pack(fill="both", expand=True)
 
             # Coefficient text box for matrix
-            self.matrix_coefficient_text = tk.Text(matrix_frame, height=10, width=30)
-            self.matrix_coefficient_text.grid(row=3, column=0, columnspan=2, padx=5, pady=5)
+            self.matrix_coefficient_text = tk.Text(matrix_frame, height=10, width=150)
+            self.matrix_coefficient_text.grid(row=3, column=0, columnspan=1, padx=5, pady=5)
             self.matrix_coefficient_text.config(state='disabled')
 
     def show_scatter_plot(self):

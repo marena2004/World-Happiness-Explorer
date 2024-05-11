@@ -9,22 +9,20 @@ from model import Model
 class StatPage:
     """Statistics page with summary statistics and histogram."""
 
-    def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("Statistics Page")
-        self.create_widgets()
+    def __init__(self,root, model):
+        self.root = root
+        self.model = model
+        self.page = ttk.Frame(self.root)
+        # self.page.pack(fill="both", expand=True)
+        self.load_data()
+        # self.create_widgets()
 
         # Bind the configure event to the root window
         self.root.bind("<Configure>", self.on_resize)
 
     def load_data(self):
-        self.model = Model()
-        try:
-            self.model.load_data()
-            self.data = self.model.get_data()
-        except FileNotFoundError:
-            messagebox.showerror("Error", "CSV file not found.")
-            self.data = None
+        self.model.load_data()
+        self.data = self.model.get_data()
 
     def create_widgets(self):
         self.load_data()
@@ -195,6 +193,6 @@ class StatPage:
 
 
 # Run the application
-if __name__ == "__main__":
-    stat_page = StatPage()
-    stat_page.run()
+# if __name__ == "__main__":
+#     stat_page = StatPage()
+#     stat_page.run()

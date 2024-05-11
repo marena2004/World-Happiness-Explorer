@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class DataLoader:
+class Model:
     """Handles loading, cleaning, and storing of CSV data."""
 
     def __init__(self):
@@ -24,12 +24,12 @@ class DataLoader:
                                 'North Macedonia': 'Macedonia'}, inplace=True)
 
         # Add the correct Region value to changed index
-        self.data.loc['Taiwan', 'Region'] = 'Eastern Asia'
-        self.data.loc['Hong Kong', 'Region'] = 'Eastern Asia'
-        self.data.loc['Trinidad and Tobago', 'Region'] = 'Latin America and Caribbean'
-        self.data.loc['North Cyprus', 'Region'] = 'Central and Eastern Europe'
-        self.data.loc['Macedonia', 'Region'] = 'Central and Eastern Europe'
-        self.data.loc['Gambia', 'Region'] = 'Sub-Saharan Africa'
+        self.data.loc[self.data['Country'] == 'Taiwan', 'Region'] = 'Eastern Asia'
+        self.data.loc[self.data['Country'] == 'Hong Kong', 'Region'] = 'Eastern Asia'
+        self.data.loc[self.data['Country'] == 'Trinidad and Tobago', 'Region'] = 'Latin America and Caribbean'
+        self.data.loc[self.data['Country'] == 'North Cyprus', 'Region'] = 'Central and Eastern Europe'
+        self.data.loc[self.data['Country'] == 'Macedonia', 'Region'] = 'Central and Eastern Europe'
+        self.data.loc[self.data['Country'] == 'Gambia', 'Region'] = 'Sub-Saharan Africa'
 
     def get_data(self):
         return self.data

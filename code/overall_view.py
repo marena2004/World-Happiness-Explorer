@@ -21,7 +21,7 @@ class OverallPage:
         self.page.pack(fill="both", expand=True)
 
         self.load_data()
-        self.create_widgets()
+        # self.create_widgets()
 
     def load_data(self):
         try:
@@ -34,32 +34,32 @@ class OverallPage:
     def create_widgets(self):
         if self.data is not None:
             # Choropleth Map
-            map_frame = ttk.LabelFrame(self.root, text="Choropleth Map")
+            map_frame = ttk.LabelFrame(self.page, text="Choropleth Map")
             map_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
             self.show_choropleth_map(map_frame)
 
             # Scatter Plot
-            scatter_frame = ttk.LabelFrame(self.root, text="Scatter Plot")
+            scatter_frame = ttk.LabelFrame(self.page, text="Scatter Plot")
             scatter_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
             self.show_scatter_plot(scatter_frame)
 
             # Pie Chart
-            pie_frame = ttk.LabelFrame(self.root, text="Happiness Score by Region (All Years)")
+            pie_frame = ttk.LabelFrame(self.page, text="Happiness Score by Region (All Years)")
             pie_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
             self.show_pie_chart(pie_frame)
 
             # Bar Chart
-            bar_frame = ttk.LabelFrame(self.root, text="Factors Contributing to Happiness Score")
+            bar_frame = ttk.LabelFrame(self.page, text="Factors Contributing to Happiness Score")
             bar_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
             self.show_bar_chart(bar_frame)
 
             # Descriptive Statistics
-            stats_frame = ttk.LabelFrame(self.root, text="Descriptive Statistics")
+            stats_frame = ttk.LabelFrame(self.page, text="Descriptive Statistics")
             stats_frame.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
             self.show_descriptive_statistics(stats_frame)
 
-            # Coefficient Value
-            coef_frame = ttk.LabelFrame(self.root, text="Correlation Coefficient")
+            # Correlation Coefficient
+            coef_frame = ttk.LabelFrame(self.page, text="Correlation Coefficient")
             coef_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
             self.show_correlation_coefficient(coef_frame)
 
@@ -68,8 +68,8 @@ class OverallPage:
 
         # Configure grid weights to resize when the window expands
         for i in range(4):
-            self.root.grid_rowconfigure(i, weight=1)
-            self.root.grid_columnconfigure(i, weight=1)
+            self.page.grid_rowconfigure(i, weight=1)
+            self.page.grid_columnconfigure(i, weight=1)
 
     def show_choropleth_map(self, parent_frame):
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
@@ -98,15 +98,16 @@ class OverallPage:
         # Selecting random factors
         factor1, factor2 = np.random.choice(factors, 2, replace=False)
 
-        if "Happiness_Score" not in [factor1, factor2]:
-            messagebox.showwarning("Warning", "Happiness Score is not included in selected factors.")
-
         # Scatter plot
         fig, ax = plt.subplots(figsize=(6, 4))
-        sns.scatterplot(data=self.data, x=factor1, y=factor2, hue="Region", ax=ax)
-        ax.set_xlabel(factor1)
-        ax.set_ylabel(factor2)
-        ax.set_title(f"Scatter Plot: {factor1} vs {factor2}")
+        sns.scatterplot(data=self.data, x=factor1, y=factor2, hue="Region", ax=ax, legend='brief')
+        ax.set_xlabel(factor1, fontsize=12)
+        ax.set_ylabel(factor2, fontsize=12)
+        ax.set_title(f"Scatter Plot: {factor1} vs {factor2}", fontsize=14)
+
+        # Control legend size
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(handles=handles, labels=labels, loc='upper left', fontsize=8)
 
         # Display the scatter plot in the GUI
         canvas = FigureCanvasTkAgg(fig, master=parent_frame)
@@ -164,8 +165,7 @@ class OverallPage:
     def run(self):
         self.root.mainloop()
 
-
 # Run the application
-if __name__ == "__main__":
-    overall_page = OverallPage()
-    overall_page.run()
+# if __name__ == "__main__":
+#     overall_page = OverallPage()
+#     overall_page.run()
