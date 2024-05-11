@@ -1,12 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from model import Model
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.stats import linregress
+
 
 class CorrelationPage:
     """Page to display scatter plot and correlation matrix."""
@@ -42,14 +41,16 @@ class CorrelationPage:
             year_label.grid(row=0, column=0, padx=5, pady=5)
             self.year_var = tk.StringVar()
             year_combobox = ttk.Combobox(scatter_frame, textvariable=self.year_var,
-                                         values=["All"] + self.data["Year"].astype(str).unique().tolist())
+                                         values=["All"] + self.data["Year"].astype(str).unique().tolist(),
+                                         state="readonly")
             year_combobox.grid(row=0, column=1, padx=5, pady=5)
 
             # Region selection
             region_label = ttk.Label(scatter_frame, text="Select Region:")
             region_label.grid(row=0, column=2, padx=5, pady=5)
             self.region_var = tk.StringVar()
-            self.region_listbox = tk.Listbox(scatter_frame, listvariable=self.region_var, selectmode="multiple", exportselection=0)
+            self.region_listbox = tk.Listbox(scatter_frame, listvariable=self.region_var, selectmode="multiple",
+                                             exportselection=0, height=30,width=50)
             self.region_listbox.grid(row=0, column=3, padx=5, pady=5)
 
             for region in ["All"] + self.data["Region"].unique().tolist():
@@ -62,7 +63,7 @@ class CorrelationPage:
             factor1_combobox = ttk.Combobox(scatter_frame, textvariable=self.factor1_var,
                                             values=["Happiness_Rank", "Happiness_Score", "GDP",
                                                     "Family", "Health", "Freedom",
-                                                    "Corruption", "Generosity"])
+                                                    "Corruption", "Generosity"], state="readonly")
             factor1_combobox.grid(row=1, column=1, padx=5, pady=5)
 
             # Factor 2 selection
@@ -72,7 +73,7 @@ class CorrelationPage:
             factor2_combobox = ttk.Combobox(scatter_frame, textvariable=self.factor2_var,
                                             values=["Happiness_Rank", "Happiness_Score", "GDP",
                                                     "Family", "Health", "Freedom",
-                                                    "Corruption", "Generosity"])
+                                                    "Corruption", "Generosity"], state="readonly")
             factor2_combobox.grid(row=2, column=1, padx=5, pady=5)
 
             # Go button for scatter plot
@@ -93,11 +94,12 @@ class CorrelationPage:
 
             # Year selection for matrix
             matrix_year_label = ttk.Label(matrix_frame, text="Select Year:")
-            matrix_year_label.grid(row=1, column=0, padx=5, pady=5)  # Adjusted row to 0
+            matrix_year_label.grid(row=1, column=0, padx=5, pady=5)
             self.matrix_year_var = tk.StringVar()
             matrix_year_combobox = ttk.Combobox(matrix_frame, textvariable=self.matrix_year_var,
-                                                values=["All"] + self.data["Year"].astype(str).unique().tolist())
-            matrix_year_combobox.grid(row=1, column=1, padx=5, pady=5)  # Adjusted row to 0
+                                                values=["All"] + self.data["Year"].astype(str).unique().tolist(),
+                                                state="readonly")
+            matrix_year_combobox.grid(row=1, column=1, padx=5, pady=5)
 
             # Go button for matrix
             matrix_go_button = ttk.Button(matrix_frame, text="Go", command=self.show_correlation_matrix)
@@ -221,7 +223,3 @@ class CorrelationPage:
     def run(self):
         self.root.mainloop()
 
-# Run the application
-if __name__ == "__main__":
-    correlation_page = CorrelationPage()
-    correlation_page.run()

@@ -2,13 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import matplotlib.pyplot as plt
-import pandas as pd
 import geopandas as gpd
 import seaborn as sns
 import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from model import Model
+
 
 
 class OverallPage:
@@ -21,7 +20,7 @@ class OverallPage:
         self.page.pack(fill="both", expand=True)
 
         self.load_data()
-        # self.create_widgets()
+        self.create_widgets()
 
     def load_data(self):
         try:
@@ -55,21 +54,21 @@ class OverallPage:
 
             # Descriptive Statistics
             stats_frame = ttk.LabelFrame(self.page, text="Descriptive Statistics")
-            stats_frame.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+            stats_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
             self.show_descriptive_statistics(stats_frame)
 
             # Correlation Coefficient
             coef_frame = ttk.LabelFrame(self.page, text="Correlation Coefficient")
-            coef_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+            coef_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
             self.show_correlation_coefficient(coef_frame)
+
+            # Configure grid weights to resize when the window expands
+            for i in range(3):
+                self.page.grid_rowconfigure(i, weight=1)
+                self.page.grid_columnconfigure(i, weight=1)
 
         else:
             messagebox.showerror("Error", "Data not loaded.")
-
-        # Configure grid weights to resize when the window expands
-        for i in range(4):
-            self.page.grid_rowconfigure(i, weight=1)
-            self.page.grid_columnconfigure(i, weight=1)
 
     def show_choropleth_map(self, parent_frame):
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
@@ -78,7 +77,7 @@ class OverallPage:
         avg_happiness = self.data.groupby('Country')['Happiness_Score'].mean()
         world = world.merge(avg_happiness, left_on='name', right_index=True, how='left')
 
-        fig, ax = plt.subplots(figsize=(6, 4))
+        fig, ax = plt.subplots(figsize=(6, 5))
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.1)
 
@@ -101,13 +100,13 @@ class OverallPage:
         # Scatter plot
         fig, ax = plt.subplots(figsize=(6, 4))
         sns.scatterplot(data=self.data, x=factor1, y=factor2, hue="Region", ax=ax, legend='brief')
-        ax.set_xlabel(factor1, fontsize=12)
-        ax.set_ylabel(factor2, fontsize=12)
+        ax.set_xlabel(factor1, fontsize=10)
+        ax.set_ylabel(factor2, fontsize=10)
         ax.set_title(f"Scatter Plot: {factor1} vs {factor2}", fontsize=14)
 
         # Control legend size
         handles, labels = ax.get_legend_handles_labels()
-        ax.legend(handles=handles, labels=labels, loc='upper left', fontsize=8)
+        ax.legend(handles=handles, labels=labels, loc='upper right', fontsize=5)
 
         # Display the scatter plot in the GUI
         canvas = FigureCanvasTkAgg(fig, master=parent_frame)
@@ -116,9 +115,14 @@ class OverallPage:
 
     def show_pie_chart(self, parent_frame):
         # Pie chart
-        fig, ax = plt.subplots(figsize=(6, 4))
+        fig, ax = plt.subplots(figsize=(8, 6))
         region_counts = self.data['Region'].value_counts()
-        ax.pie(region_counts, labels=region_counts.index, autopct='%1.1f%%', startangle=140)
+        ax.pie(region_counts, labels=None, autopct='%1.1f%%', startangle=140)
+
+        # Add color labels for regions
+        colors = sns.color_palette("pastel", len(region_counts))
+        ax.legend(region_counts.index, title="Region", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1), fontsize=8,
+                  facecolor='lightgrey')
         ax.set_title("Happiness Score by Region (All Years)")
 
         # Display the pie chart in the GUI
@@ -143,7 +147,7 @@ class OverallPage:
 
     def show_descriptive_statistics(self, parent_frame):
         # Descriptive statistics
-        stats_text = tk.Text(parent_frame, wrap="word", height=15, width=60)
+        stats_text = tk.Text(parent_frame, wrap="word", height=15, width=60, state="disabled")
         stats_text.pack(fill="both", expand=True)
 
         # Calculate descriptive statistics
@@ -158,14 +162,6 @@ class OverallPage:
         corr_matrix = numeric_data.corr()
 
         # Display correlation coefficients in a text box
-        coef_text = tk.Text(parent_frame, wrap="word", height=5, width=60)
+        coef_text = tk.Text(parent_frame, wrap="word", height=5, width=60, state="disabled")
         coef_text.pack(fill="both", expand=True)
         coef_text.insert(tk.END, "Correlation Coefficients:\n\n" + str(corr_matrix))
-
-    def run(self):
-        self.root.mainloop()
-
-# Run the application
-# if __name__ == "__main__":
-#     overall_page = OverallPage()
-#     overall_page.run()

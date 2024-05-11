@@ -12,9 +12,7 @@ class StatPage:
         self.root = root
         self.model = model
         self.page = ttk.Frame(self.root)
-        # self.page.pack(fill="both", expand=True)
         self.load_data()
-        # self.create_widgets()
 
         # Bind the configure event to the root window
         self.root.bind("<Configure>", self.on_resize)
@@ -38,7 +36,7 @@ class StatPage:
             factor_combobox = ttk.Combobox(selection_frame, textvariable=self.factor_var,
                                            values=["Happiness_Rank", "Happiness_Score", "GDP",
                                                    "Family", "Health", "Freedom",
-                                                   "Corruption", "Generosity"])
+                                                   "Corruption", "Generosity"], state="readonly")
             factor_combobox.grid(row=1, column=0, padx=5, pady=5)
 
             # Select Region
@@ -46,7 +44,8 @@ class StatPage:
             region_label.grid(row=0, column=1, padx=5, pady=5)
             self.region_var = tk.StringVar()
             region_combobox = ttk.Combobox(selection_frame, textvariable=self.region_var,
-                                           values=["All"] + self.data["Region"].unique().tolist())
+                                           values=["All"] + self.data["Region"].unique().tolist()
+                                           ,state="readonly")
             region_combobox.grid(row=1, column=1, padx=5, pady=5)
 
             # Select Year
@@ -54,7 +53,8 @@ class StatPage:
             year_label.grid(row=0, column=2, padx=5, pady=5)
             self.year_var = tk.StringVar()
             year_combobox = ttk.Combobox(selection_frame, textvariable=self.year_var,
-                                         values=["All"] + self.data["Year"].astype(str).unique().tolist())
+                                         values=["All"] + self.data["Year"].astype(str).unique().tolist()
+                                         , state="readonly")
             year_combobox.grid(row=1, column=2, padx=5, pady=5)
 
             # Clear button

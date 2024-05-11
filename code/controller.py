@@ -14,49 +14,76 @@ class Controller:
         self.root = tk.Tk()
         self.root.title("World Happiness Explorer")
         self.model = Model()
-        self.create_home_page()
 
-    def create_home_page(self):
-        """Create the home page with navigation buttons."""
-        home_frame = ttk.Frame(self.root)
-        home_frame.pack(padx=10, pady=10)
+        # Create frames
+        self.options_frame = ttk.Frame(self.root)
+        self.main_frame = ttk.Frame(self.root)
 
-        # Navigation buttons
-        overall_button = ttk.Button(home_frame, text="Overall Analysis", command=self.show_overall_page)
-        overall_button.grid(row=0, column=0, padx=10, pady=5)
+        # Styling
+        self.options_frame.configure(width=630, height=50)
+        self.main_frame.configure(padding=(10, 10, 10, 10))
 
-        correlation_button = ttk.Button(home_frame, text="Correlation Analysis", command=self.show_correlation_page)
-        correlation_button.grid(row=0, column=1, padx=10, pady=5)
+        # Create navigation buttons
+        self.create_navigation_buttons()
 
-        statistics_button = ttk.Button(home_frame, text="Statistics", command=self.show_statistics_page)
-        statistics_button.grid(row=0, column=2, padx=10, pady=5)
+        # Organize widgets
+        self.organize_widgets()
 
-        trend_button = ttk.Button(home_frame, text="Trend Analysis", command=self.show_trend_page)
-        trend_button.grid(row=0, column=3, padx=10, pady=5)
+    def create_navigation_buttons(self):
+        """Create navigation buttons."""
+        self.buttons = []
+        button_names = ["Overall", "Stat", "Correlation", "Trend", "Exit"]
+        button_commands = [self.show_overall_page, self.show_statistics_page,
+                           self.show_correlation_page, self.show_trend_page, self.exit_app]
 
-        # Exit button
-        exit_button = ttk.Button(home_frame, text="Exit", command=self.root.quit)
-        exit_button.grid(row=0, column=4, padx=10, pady=5)
+        for name, command in zip(button_names, button_commands):
+            button = ttk.Button(self.options_frame, text=name, command=command, style="NavigationButton.TButton")
+            self.buttons.append(button)
+
+        # Define custom style for buttons
+        style = ttk.Style()
+        style.configure("NavigationButton.TButton", font=('Arial', 13), foreground='black', background='#F8A030')
+
+    def organize_widgets(self):
+        """Organize widgets."""
+        self.options_frame.pack(pady=5)
+        self.main_frame.pack(fill=tk.BOTH, expand=True)
+
+        for i, button in enumerate(self.buttons):
+            button.pack(side="left", padx=5)
 
     def show_overall_page(self):
         """Show the overall analysis page."""
-        overall_page = OverallPage(self.root, self.model)
+        self.clear_main_frame()
+        overall_page = OverallPage(self.main_frame, self.model)
         overall_page.create_widgets()
 
     def show_correlation_page(self):
         """Show the correlation analysis page."""
-        correlation_page = CorrelationPage(self.root, self.model)
+        self.clear_main_frame()
+        correlation_page = CorrelationPage(self.main_frame, self.model)
         correlation_page.create_widgets()
 
     def show_statistics_page(self):
         """Show the statistics page."""
-        stat_page = StatPage(self.root, self.model)
+        self.clear_main_frame()
+        stat_page = StatPage(self.main_frame, self.model)
         stat_page.create_widgets()
 
     def show_trend_page(self):
         """Show the trend analysis page."""
-        trend_page = TrendPage(self.root, self.model)
+        self.clear_main_frame()
+        trend_page = TrendPage(self.main_frame, self.model)
         trend_page.create_widgets()
+
+    def exit_app(self):
+        """Exit the application."""
+        self.root.destroy()
+
+    def clear_main_frame(self):
+        """Clear the main frame."""
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
 
     def run(self):
         """Run the application."""
