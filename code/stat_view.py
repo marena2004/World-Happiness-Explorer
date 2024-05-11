@@ -19,10 +19,12 @@ class StatPage:
         self.root.bind("<Configure>", self.on_resize)
 
     def load_data(self):
+        """ load data from model"""
         self.model.load_data()
         self.data = self.model.get_data()
 
     def create_widgets(self):
+        """ generate widgets for stat page"""
         self.load_data()
 
         if self.data is not None:
@@ -90,6 +92,7 @@ class StatPage:
             self.canvas.get_tk_widget().pack(expand=True, fill='both')
 
     def show_summary(self):
+        """ Show summary of descriptive statistic"""
         if self.data is None:
             return
 
@@ -128,6 +131,7 @@ class StatPage:
         self.summary_box.configure(state='disabled')
 
     def show_histogram(self):
+        """ Plot histogram to show frequency"""
         if self.data is None:
             return
 
@@ -168,6 +172,7 @@ class StatPage:
         self.canvas.draw()
 
     def clear(self):
+        """ clear data after click clear button"""
         if self.data is None:
             return
 
@@ -194,8 +199,6 @@ class StatPage:
             if isinstance(widget, ttk.Button) or isinstance(widget, ttk.Label) or isinstance(widget, ttk.Combobox):
                 widget.configure(font=("Arial", new_font_size))
 
-    def run(self):
-        self.root.mainloop()
 
 
 
