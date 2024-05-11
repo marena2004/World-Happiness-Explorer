@@ -23,6 +23,7 @@ class TrendPage:
         self.create_widgets()
 
     def load_data(self):
+        """ load data from model"""
         try:
             self.model.load_data()
             self.data = self.model.get_data()
@@ -32,6 +33,7 @@ class TrendPage:
             self.data = None
 
     def create_widgets(self):
+        """ generate widgets for trend page"""
         if self.data is not None:
             # Factor selection
             factor_label = ttk.Label(self.page, text="Select Factors:")
@@ -70,6 +72,7 @@ class TrendPage:
             messagebox.showerror("Error", "Data not loaded.")
 
     def show_trend_plot(self):
+        """ plot trend to show change over the years"""
         if self.data is None:
             return
 
@@ -109,6 +112,7 @@ class TrendPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def clear_trend_plot(self):
+        """clear data """
         self.factor_listbox.selection_clear(0, tk.END)
         self.region_listbox.selection_clear(0, tk.END)
         self.trend_frame.destroy()

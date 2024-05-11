@@ -23,6 +23,7 @@ class OverallPage:
         self.create_widgets()
 
     def load_data(self):
+        """ load data from model"""
         try:
             self.model.load_data()
             self.data = self.model.get_data()
@@ -31,6 +32,7 @@ class OverallPage:
             self.data = None
 
     def create_widgets(self):
+        """ generate widgets for OverallPage"""
         self.load_data()  # Ensure data is loaded before creating widgets
 
         if self.data is not None:
@@ -73,6 +75,7 @@ class OverallPage:
             messagebox.showerror("Error", "Data not loaded.")
 
     def show_choropleth_map(self, parent_frame):
+        """ plot choropleth_map to show average happiness score by country"""
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
         # Calculate average happiness score by country
@@ -94,6 +97,7 @@ class OverallPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def show_scatter_plot(self, parent_frame):
+        """ scatter plot show relationship GDP and Corruption compare to happiness score"""
         factors = ["GDP", "Corruption", "Happiness_Score"]
 
         # Selecting random factors
@@ -116,6 +120,7 @@ class OverallPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def show_pie_chart(self, parent_frame):
+        """ Pie chart show happiness score by regions"""
         # Pie chart
         fig, ax = plt.subplots(figsize=(8, 6))
         region_counts = self.data['Region'].value_counts()
@@ -133,6 +138,7 @@ class OverallPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def show_bar_chart(self, parent_frame):
+        """ Bar chart show factor that contribute to happiness score"""
         # Bar chart
         factors = ["GDP", "Family", "Health", "Freedom", "Corruption", "Generosity"]
         avg_factors = self.data[factors].mean()
@@ -148,7 +154,8 @@ class OverallPage:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     def show_descriptive_statistics(self, parent_frame):
-        # Filter data to include only 'Happiness_Score' and 'GDP' columns
+        """ show descriptive statistics of happiness score"""
+
         filtered_data = self.data[['Happiness_Score']]
 
         # Descriptive statistics
@@ -160,7 +167,7 @@ class OverallPage:
         stats_text.insert(tk.END, str(num_stats))
 
     def show_correlation_coefficient(self, parent_frame):
-        # Filter data to include only 'Happiness_Score' and 'GDP' columns
+        """ show coefficient value of happiness score, GDP, and corruption"""
         filtered_data = self.data[['Happiness_Score', 'GDP', 'Corruption']]
 
         # Calculate correlation coefficients for filtered data

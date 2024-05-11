@@ -134,6 +134,7 @@ class CorrelationPage:
             self.matrix_coefficient_text.config(state='disabled')
 
     def show_scatter_plot(self):
+        """ scatter plot show relationship of 2 selected factors"""
         if self.data is None:
             return
 
@@ -180,6 +181,7 @@ class CorrelationPage:
         self.scatter_canvas.draw()
 
     def clear_scatter(self):
+        """clear data"""
         self.year_var.set("")
         self.region_listbox.selection_clear(0, tk.END)
         self.factor1_var.set("")
@@ -191,6 +193,7 @@ class CorrelationPage:
         self.scatter_coefficient_text.config(state="disabled")
 
     def show_correlation_matrix(self):
+        """ show correlation matrix of economic factors"""
         if self.data is None:
             return
 
@@ -221,6 +224,7 @@ class CorrelationPage:
         self.matrix_coefficient_text.config(state="disabled")
 
     def clear_matrix(self):
+        """clear data"""
         self.matrix_year_var.set("")
         self.matrix_ax.clear()
         self.matrix_canvas.draw()
