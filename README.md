@@ -3,6 +3,14 @@ A project to visualize and analyze the World Happiness Report data from 2015 to 
 
 # Description
 The project aims to provide users with an intuitive interface to explore and analyze happiness trends across countries and regions using data from the World Happiness Report. The UI will include interactive graphs and descriptive statistics to help users gain insights into factors affecting happiness levels.
+# Main Features
+1.Overall page - storytelling page
+
+2.stat page - show summary of descriptive statistics and distribution of the histogram.
+   
+3.Correlation page - show relationship between economic factors, happiness sore, and happiness rank
+
+4.Trend page - show change of happiness core, happiness rank, other economic factors
 
 ## How To Run
 
